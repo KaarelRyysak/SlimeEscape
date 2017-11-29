@@ -3,6 +3,19 @@ import random
 from settings import *
 from sprites import *
 
+lvl = """
+                            #   #     #         #                 
+#      #                                                          #      #                    
+ #          #           #                                    #    
+                            #   #     #         #                 
+                #                               #     #        #  
+
+   #                        #                #                    
+          ####       #              #                 #           
+    #                       #       #        #                    
+##################################################################"""
+lvl = lvl.split('\n')[1:]
+
 class Game:
     def __init__(self):
         # initialize game window, etc
@@ -69,15 +82,18 @@ class Game:
             
                     
         # spawn new platforms
-        while len(self.platforms) < 5:
-            width = random.randrange(100, 200)
-            p = Platform(WIDTH, HEIGHT-40, width, 40)
-            p2 = Platform(WIDTH+300, HEIGHT-200, width, 40)
-            self.platforms.add(p)
-            self.all_sprites.add(p)
-            self.platforms.add(p2)
-            self.all_sprites.add(p2)
-            
+        if len(self.platforms) < 100:
+            x = 0
+            y = 0
+            for line in lvl:
+                for char in line:
+                    if char == "#":
+                        p = Platform(WIDTH+x*40, y*40, 40, 40)
+                        self.platforms.add(p)
+                        self.all_sprites.add(p)
+                    x += 1
+                x = 0
+                y += 1
                  
 
     def events(self):
@@ -88,6 +104,7 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+            # Jump
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.player.jump()
