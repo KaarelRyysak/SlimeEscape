@@ -1,5 +1,6 @@
 # Sprite classes for Slime Escape
 from settings import *
+from random import randint
 import pygame as pg
 from pygame.locals import *
 vec = pg.math.Vector2
@@ -59,3 +60,70 @@ class Platform(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+#Stage layout selection
+#It's not a sprite, but it's still related to display...
+class Stage:
+    def __init__(self):
+        levelnum = randint(1, 5)
+        if levelnum == 1:
+            self.level = """
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+            #                                                     
+            #                             #####                   
+           ##                    #####      #                     
+            #                      #        #      #########      
+########    #    ############      #        #        #   #        """
+        elif levelnum == 2:
+            self.level = """
+                                                                  
+                                 #                                
+                                 #                                
+                                 #     #                          
+                     ##          ####  #                          
+                    #########    #     #                          
+                     ##          #     #   ######                 
+                #    ##      #####   ###     ##                   
+           #    #    ##                #     ##      #####        
+######     #    #    ##      ###########     ##        #      ####"""
+        elif levelnum == 3:
+            self.level = """
+                            #              #                      
+                            #                                     
+                #  #        #              ##                     
+                #  #   ###  #              #                      
+               ## ##  ###  ####           ##                      
+                #    #####    #                   #######         
+             ###############                         #            
+             #                     ####              #            
+  #######                  #####    ##               #            
+     #       #   ######      #      ##               #         ###"""
+        elif levelnum == 4:
+            self.level = """
+                                       ##       ##       ##  ##   
+                                                ##       ##  ##   
+                                       ##       ##       ##  ##   
+                                        #                ##  ##   
+                                        #       ##           ##   
+                                       ##       ##       ##  ##   
+                     ####              ##       ###      ##  ##   
+             ####     ##       ##      ##       ##       #        
+    ####      ##      ##       ##      ##       ##       ##   ### 
+     ##       ##      ##       ##      ##       ##       ##    #  """
+        elif levelnum == 5:
+            self.level = """
+                   #  ############################################
+                   #                                    #         
+                   #                                              
+                   #                                    #         
+              ##  ###                                   #         
+          ##  #    #           #                       ##         
+           #  #    #           #                                  
+           #  ##   ##          #              #####            ## 
+   ###     #             ####  #  #####         #               # 
+    #      #       ##     ##   #    #           #               # """
+        

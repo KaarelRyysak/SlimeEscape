@@ -3,18 +3,7 @@ import random
 from settings import *
 from sprites import *
 
-lvl = """
-                            #   #     #         #                 
-#      #                                                          #      #                    
- #          #           #                                    #    
-                            #   #     #         #                 
-                #                               #     #        #  
 
-   #                        #                #                    
-          ####       #              #                 #           
-    #                       #       #        #                    
-##################################################################"""
-lvl = lvl.split('\n')[1:]
 
 class Game:
     def __init__(self):
@@ -82,7 +71,9 @@ class Game:
             
                     
         # spawn new platforms
-        if len(self.platforms) < 100:
+        while len(self.platforms) < 40:
+            stag = Stage()
+            lvl = stag.level.split('\n')[1:]
             x = 0
             y = 0
             for line in lvl:
@@ -94,7 +85,6 @@ class Game:
                     x += 1
                 x = 0
                 y += 1
-                 
 
     def events(self):
         # Game Loop - events
