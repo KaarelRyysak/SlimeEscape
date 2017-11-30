@@ -12,6 +12,8 @@ PLAYER_GRAV = 0.8
 PLAYER_JUMP = 17
 FONT_NAME = "arial"
 
+BG_LIST = [(0,0), (WIDTH, 0)]
+
 # Starting platforms
 PLATFORM_LIST = [(0, HEIGHT - 40, 40, 40),(40, HEIGHT - 40, 40, 40),(80, HEIGHT - 40, 40, 40),(120, HEIGHT - 40, 40, 40),(160, HEIGHT - 40, 40, 40),(200, HEIGHT - 40, 40, 40),
                  (300, HEIGHT - 40, 40, 40),(340, HEIGHT - 40, 40, 40),(380, HEIGHT - 40, 40, 40),(420, HEIGHT - 40, 40, 40),(460, HEIGHT - 40, 40, 40),(500, HEIGHT - 40, 40, 40),
@@ -25,7 +27,6 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
 #Highscore
-
 
 game_folder = os.path.dirname(__file__)
 img_folder = os.path.join(game_folder, "img")

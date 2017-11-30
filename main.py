@@ -17,16 +17,24 @@ class Game:
         self.font_name = pg.font.match_font(FONT_NAME)
 
     def new(self):
-        # start a new game
+        # start a new game            
         self.score = 0
         self.all_sprites = pg.sprite.Group()
+        self.backgrounds = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        
+        for bg in BG_LIST:
+            backg = Background(self, bg[0], bg[1])
+            self.backgrounds.add(backg)
+        
         self.player = Player(self)
         self.all_sprites.add(self.player)
+        
         for plat in PLATFORM_LIST:
             p = Platform(plat[0], plat[1], plat[2], plat[3])
             self.all_sprites.add(p)
             self.platforms.add(p)
+            
         self.run()
         
 
@@ -69,7 +77,19 @@ class Game:
             
             self.playing = False
             
-                    
+        # Moving background
+        if self.player.rect.right >= 2*WIDTH/3:
+            for bg in self.backgrounds:
+                bg.rect.right -= max(abs((self.player.vel.x)/(2)), 2)
+                if bg.rect.right <= 0:
+                        bg.kill()
+        
+        # Spawn new background
+        while len(self.backgrounds) < 3:
+            bg = Background(self, WIDTH-0.5, 0)
+            self.backgrounds.add(bg)
+
+                
         # spawn new platforms
         while len(self.platforms) < 40:
             stag = Stage()
@@ -103,8 +123,9 @@ class Game:
                 self.player.shortjump()
 
     def draw(self):
-        # Game Loop - draw
+        # Game Loop
         self.screen.fill(BLACK)
+        self.backgrounds.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score), 40, WHITE, WIDTH/2, 15)
         f = open("highscore.txt")
