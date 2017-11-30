@@ -61,6 +61,15 @@ class Platform(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+class Background(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        self.image = pg.image.load(os.path.join(img_folder, "bg.jpg")).convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
 #Stage layout selection
 #It's not a sprite, but it's still related to display...
 class Stage:
@@ -126,4 +135,3 @@ class Stage:
            #  ##   ##          #              #####            ## 
    ###     #             ####  #  #####         #               # 
     #      #       ##     ##   #    #           #               # """
-        
