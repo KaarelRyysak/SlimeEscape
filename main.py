@@ -121,7 +121,7 @@ class Game:
                 f = open("highscore.txt", "w")
                 f.write(str(self.score))
                 f.close()
-            f.close()
+            f.close() 
             
             self.playing = False
             
@@ -168,12 +168,30 @@ class Game:
 
     def show_start_screen(self):
         # game splash/start screen
-        self.screen.fill(BLUE)
-        self.draw_text(TITLE, 48, WHITE, WIDTH/2, HEIGHT/4)
-        self.draw_text("Arrows to move and space to jump", 22, WHITE, WIDTH/2, HEIGHT/2)
-        self.draw_text("Press a key to play", 22, WHITE, WIDTH/2, HEIGHT * 3/4)
-        pg.display.flip()
-        self.wait_for_key()
+        intro = True
+        self.screen.fill(GREEN)
+        active = pg.image.load(os.path.join(img_folder, "active.jpg")).convert()
+        notactive = pg.image.load(os.path.join(img_folder, "notactive.jpg")).convert()
+        while intro:
+            for event in pg.event.get():
+                print(event)
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+
+            mouse = pg.mouse.get_pos()
+            click = pg.mouse.get_pressed()
+            
+            if 323+154 > mouse[0] > 323 and 179+47 > mouse[1] > 179:
+                self.screen.blit(active, (0,0))
+                if click[0] == 1:
+                    intro = False
+            else:
+                self.screen.blit(notactive, (0, 0))
+            
+            
+            pg.display.update()
+            self.clock.tick(15)
 
     def show_go_screen(self):
         # game over/continue
@@ -185,8 +203,6 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
         
-    
-    
     def wait_for_key(self):
         waiting = True
         while waiting:
