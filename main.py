@@ -37,6 +37,10 @@ class Game:
             x = 0
             y += 1
 
+    def spawn_background(self):
+            bg = Background(self, WIDTH-0.5, 0)
+            self.backgrounds.add(bg)
+
     def new(self):
         # start a new game            
         self.score = 0
@@ -56,6 +60,7 @@ class Game:
             self.all_sprites.add(p)
             self.platforms.add(p)
         self.spawn_platforms()
+        self.spawn_background()
             
         self.run()
         
@@ -73,10 +78,18 @@ class Game:
         # Game Loop - Update
         self.all_sprites.update()
         # check if player hits a platform - only if falling
-        if self.player.vel.y > 0:
+        if self.player.vel.y != 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-            if hits:
+            if hits: #Parandan selle millalgi hiljem -Kaarel
+##                if self.player.pos.x < hits[0].rect.left - 20:
+##                    self.player.pos.x = hits[0].rect.left - 20
+##                    self.vel.x = 0
+##                if self.player.pos.x > hits[0].rect.right + 20:
+##                    self.player.pos.x = hits[0].rect.left + 20
+##                    self.vel.x = 0
+##                if self.player.pos.y < 
                 self.player.pos.y = hits[0].rect.top + 1
+##                self.player.pos.x = hits[0].rect.left + 1
                 self.player.vel.y = 0
                 
         # if player reaches right 1/4 of screen
@@ -89,6 +102,17 @@ class Game:
                             self.spawn_platforms()
                         plat.kill()
                         self.score += 10
+
+        #Automatic screen scrolling
+        if self.player.rect.right < 2*WIDTH/3:
+            self.player.pos.x -= 2
+            for plat in self.platforms:
+                plat.rect.right -= 2
+        for bg in self.backgrounds:
+            bg.rect.right -= 2 #Auto move
+            if bg.rect.right <= 0:
+                bg.kill()
+                self.spawn_background()
         
         # If we die
         if self.player.rect.bottom > HEIGHT:
@@ -107,11 +131,9 @@ class Game:
                 bg.rect.right -= max(abs((self.player.vel.x)/(2)), 2)
                 if bg.rect.right <= 0:
                         bg.kill()
+                        self.spawn_background()
         
-        # Spawn new background
-        while len(self.backgrounds) < 3:
-            bg = Background(self, WIDTH-0.5, 0)
-            self.backgrounds.add(bg)
+
 
                 
 
