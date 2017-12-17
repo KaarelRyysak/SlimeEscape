@@ -115,7 +115,7 @@ class Game:
                 self.spawn_background()
         
         # If we die
-        if self.player.rect.bottom > HEIGHT:
+        if self.player.rect.bottom > HEIGHT or self.player.rect.right < 0:
             f = open("highscore.txt")
             if self.score > int(f.readline()):
                 f = open("highscore.txt", "w")
