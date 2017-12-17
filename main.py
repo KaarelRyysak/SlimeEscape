@@ -16,6 +16,27 @@ class Game:
         self.running = True
         self.font_name = pg.font.match_font(FONT_NAME)
 
+        # spawn new platforms
+    def spawn_platforms(self):
+        stag = Stage()
+        lvl = stag.level.split('\n')[1:]
+        x = 0
+        y = 0
+        for line in lvl:
+            for char in line:
+                if char == "#":
+                    p = Platform(WIDTH+x*40, y*40, 40, 40)
+                    self.platforms.add(p)
+                    self.all_sprites.add(p)
+                #Spawns platform that, when deleted, creates another part of the level
+                elif char == "R": 
+                    p = Platform(WIDTH+x*40, y*40, 40, 40, True)
+                    self.platforms.add(p)
+                    self.all_sprites.add(p)
+                x += 1
+            x = 0
+            y += 1
+
     def new(self):
         # start a new game            
         self.score = 0
@@ -34,6 +55,7 @@ class Game:
             p = Platform(plat[0], plat[1], plat[2], plat[3])
             self.all_sprites.add(p)
             self.platforms.add(p)
+        self.spawn_platforms()
             
         self.run()
         
@@ -63,6 +85,8 @@ class Game:
             for plat in self.platforms:
                 plat.rect.right -= max(abs(self.player.vel.x),2)
                 if plat.rect.right <= 0:
+                        if plat.reset:
+                            self.spawn_platforms()
                         plat.kill()
                         self.score += 10
         
@@ -90,21 +114,7 @@ class Game:
             self.backgrounds.add(bg)
 
                 
-        # spawn new platforms
-        while len(self.platforms) < 40:
-            stag = Stage()
-            lvl = stag.level.split('\n')[1:]
-            x = 0
-            y = 0
-            for line in lvl:
-                for char in line:
-                    if char == "#":
-                        p = Platform(WIDTH+x*40, y*40, 40, 40)
-                        self.platforms.add(p)
-                        self.all_sprites.add(p)
-                    x += 1
-                x = 0
-                y += 1
+
 
     def events(self):
         # Game Loop - events

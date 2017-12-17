@@ -53,13 +53,16 @@ class Player(pg.sprite.Sprite):
         self.rect.midbottom = self.pos
         
 class Platform(pg.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, reset=False):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.Surface((w, h))
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.reset = reset
+
+
 
 class Background(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -84,7 +87,7 @@ class Stage:
                  #                                                
             #    #                                                
             #    ########                 #####                   
-           ##                    #####      #                     
+           ##                    ####R      #                     
             #                      #        #      #########      
 ########    ##   ###    #####      #        #        #   #        """
         elif levelnum == 2:
@@ -95,7 +98,7 @@ class Stage:
                                  #     #                          
                      ##          ####  #                          
                     #########    #     #                          
-                     ##          #     #   ######                 
+                     ##          #     R   ######                 
                 #    ##      #####   ###     ##                   
            #    #    ##                #     ##      #####        
 ######     #    #    ##      ###########     ##        #      ####"""
@@ -108,7 +111,7 @@ class Stage:
                ## ##  ###  ####           ##                      
                 #     ####    #                   #######         
              ###############                         #            
-             #                     ####              #            
+             #                     ###R              #            
   #######                  #####    ##               #            
      #       #   ######      #      ##               #         ###"""
         elif levelnum == 4:
@@ -120,7 +123,7 @@ class Stage:
                                             #     ##         ##   
                                            ##     ##     ##  ##   
                            ####            ##     ###    ##  ##   
-                   ####     ##       ##    ##     ##     #        
+                   ####     ##       #R    ##     ##     #        
           ####      ##      ##       ##    ##     ##     ##   ### 
   ####     ##       ##      ##       ##    ##     ##     ##    #  """
         elif levelnum == 5:
@@ -133,5 +136,5 @@ class Stage:
           ##  #    #           #                       ##         
            #  #    #           #                                  
            #  ##   ##          #              #####            ## 
-   ###     #             ####  #  #####         #               # 
+   ###     #             ####  #  ####R         #               # 
     #      #       ##     ##   #    #           #               # """
