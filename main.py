@@ -209,10 +209,9 @@ class Game:
     def show_go_screen(self):
         # game over/continue
         self.screen.fill(BLUE)
-        self.draw_text("Game over", 48, WHITE, WIDTH/2, HEIGHT / 4)
-        self.draw_text("Your score: " + str(self.score), 25, WHITE, WIDTH/2, 20
-                       )
-        self.draw_text("Press a key to continue playing", 22, WHITE, WIDTH/2, HEIGHT * 3/4)
+        gameover = pg.image.load(os.path.join(img_folder, "gameover.jpg"))
+        self.screen.blit(gameover, (0,0))
+        self.draw_text("Your score: " + str(self.score), 25, WHITE, WIDTH/2, 20)
         pg.display.flip()
         self.wait_for_key()
         
