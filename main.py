@@ -3,7 +3,7 @@ import random
 from settings import *
 from sprites import *
 from math import log
-
+import time
 
 
 class Game:
@@ -45,6 +45,8 @@ class Game:
     def new(self):
         # start a new game            
         self.score = 0
+        self.time = time.time()
+        self.score_total = 0
         self.all_sprites = pg.sprite.Group()
         self.backgrounds = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
@@ -128,17 +130,24 @@ class Game:
                 bg.kill()
                 self.spawn_background()
         
+        
+        # Highscore
+        time_now = (time.time() - self.time)
+        self.score_total = self.score + round(time_now * 15)
+        
         # If we die
         if self.player.rect.bottom > HEIGHT or self.player.rect.right < 0:
             f = open("highscore.txt")
-            if self.score > int(f.readline()):
+            self.score_var = 0
+            if self.score_total > int(f.readline()):
                 f = open("highscore.txt", "w")
-                f.write(str(self.score))
+                self.score_var = self.score_total
+                f.write(str(self.score_total))
                 f.close()
             f.close() 
             
             self.playing = False
-            
+        
         # Moving background
         if self.player.rect.right >= 2*WIDTH/3:
             for bg in self.backgrounds:
@@ -173,7 +182,7 @@ class Game:
         self.screen.fill(BLACK)
         self.backgrounds.draw(self.screen)
         self.all_sprites.draw(self.screen)
-        self.draw_text(str(self.score), 40, WHITE, WIDTH/2, 15)
+        self.draw_text(str(self.score_total), 40, WHITE, WIDTH/2, 15)
         f = open("highscore.txt")
         self.draw_text("Highscore: " + str(int(f.readline())), 25, WHITE, 70, 15)
         f.close()
@@ -211,7 +220,10 @@ class Game:
         self.screen.fill(BLUE)
         gameover = pg.image.load(os.path.join(img_folder, "gameover.jpg"))
         self.screen.blit(gameover, (0,0))
-        self.draw_text("Your score: " + str(self.score), 25, WHITE, WIDTH/2, 20)
+        if self.score_var > 0:
+            self.draw_text("New highscore: " + str(self.score_total), 25, WHITE, WIDTH/2, 20)
+        else:
+            self.draw_text("Your score: " + str(self.score_total), 25, WHITE, WIDTH/2, 20)
         pg.display.flip()
         self.wait_for_key()
         
