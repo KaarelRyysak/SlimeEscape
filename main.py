@@ -36,6 +36,7 @@ class Game:
                 x += 1
             x = 0
             y += 1
+        stag = None
 
     def spawn_background(self):
             bg = Background(self, WIDTH-0.5, 0)
