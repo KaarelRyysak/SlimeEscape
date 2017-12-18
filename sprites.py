@@ -55,8 +55,8 @@ class Player(pg.sprite.Sprite):
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h, reset=False):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(GREEN)
+        self.image = pg.image.load(os.path.join(img_folder, "Block.png")).convert()
+        self.image.set_colorkey((255,0,255))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -84,12 +84,12 @@ class Stage:
                  #         #                                      
                  #     #                                          
                  #                                                
-                 #                                                
-            #    ### ####                                         
+                 #                                            ####
+            #    ### ####                                      ## 
             #          #                  #####                   
            ##                    ####R      #                     
-            #                      #        #      #########      
-########    ##   ###   ######      #        #        #   #        """
+            #                      #        #      #########   ## 
+########    ##   ###   ######      #        #        #   #     ## """
         elif levelnum == 2:
             self.level = """
                                  #                                

@@ -2,6 +2,7 @@ import pygame as pg
 import random
 from settings import *
 from sprites import *
+from math import log
 
 
 
@@ -99,7 +100,6 @@ class Game:
                     self.player.pos.y = hits[0].rect.top + 1
                     self.player.vel.y = 0
                 else:
-                    print("jah")
                     self.player.pos.y = hits[0].rect.bottom +26
                     self.player.vel.y = 0
 ##                self.player.pos.x = hits[0].rect.left + 1
@@ -175,7 +175,7 @@ class Game:
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score), 40, WHITE, WIDTH/2, 15)
         f = open("highscore.txt")
-        self.draw_text("Highscore: " + str(f.read()), 25, WHITE, 70, 15)
+        self.draw_text("Highscore: " + str(int(f.readline())), 25, WHITE, 70, 15)
         f.close()
         # *after* drawing everything, flip the display
         pg.display.flip()
