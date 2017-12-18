@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite):
         self.game = game
         pg.sprite.Sprite.__init__(self)
         self.image = pg.image.load(os.path.join(img_folder, "slime.png")).convert()
-        self.image.set_colorkey(WHITE)
+        self.image.set_colorkey((255,0,255))
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.pos = vec(WIDTH / 2, HEIGHT / 2)

@@ -87,10 +87,24 @@ class Game:
 ##                if self.player.pos.x > hits[0].rect.right + 20:
 ##                    self.player.pos.x = hits[0].rect.left + 20
 ##                    self.vel.x = 0
-##                if self.player.pos.y < 
-                self.player.pos.y = hits[0].rect.top + 1
+##                if self.player.pos.y <
+                #If on similar height
+                if hits[0].rect.top + 10 < self.player.rect.center[1] < hits[0].rect.bottom -10:
+                    if hits[0].rect.right > self.player.rect.center[0]:
+                        self.player.pos.x -= 5
+                    else:
+                        self.player.pos.x += 5
+                    self.player.vel.x = -self.player.vel.x
+                elif hits[0].rect.top  > self.player.rect.top -10:
+                    self.player.pos.y = hits[0].rect.top + 1
+                    self.player.vel.y = 0
+                else:
+                    print("jah")
+                    self.player.pos.y = hits[0].rect.bottom +26
+                    self.player.vel.y = 0
 ##                self.player.pos.x = hits[0].rect.left + 1
-                self.player.vel.y = 0
+    
+
                 
         # if player reaches right 1/4 of screen
         if self.player.rect.right >= 2*WIDTH / 3:
@@ -100,8 +114,8 @@ class Game:
                 if plat.rect.right <= 0:
                         if plat.reset:
                             self.spawn_platforms()
+                            self.score += 100
                         plat.kill()
-                        self.score += 10
 
         #Automatic screen scrolling
         if self.player.rect.right < 2*WIDTH/3:
@@ -174,7 +188,6 @@ class Game:
         notactive = pg.image.load(os.path.join(img_folder, "notactive.jpg")).convert()
         while intro:
             for event in pg.event.get():
-                print(event)
                 if event.type == pg.QUIT:
                     pg.quit()
                     quit()
