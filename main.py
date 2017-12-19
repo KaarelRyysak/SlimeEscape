@@ -51,6 +51,17 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.backgrounds = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        f = open("options.txt")
+        txt = f.readline()
+        f.close()
+        if int(txt) == 0:
+            self.hscore = 0
+        elif int(txt) % 801 != 0:
+            print("Ära jama mängu failidega!")
+            self.playing = False
+            self.running = False
+        else:
+            self.hscore = int(log(int(txt), 801))
         
         for bg in BG_LIST:
             backg = Background(self, bg[0], bg[1])
@@ -120,10 +131,10 @@ class Game:
                 if plat.rect.right <= 0:
                         if plat.reset:
                             self.spawn_platforms()
-                            self.score += 100
+                            self.score += 300
                         plat.kill()
 
-        #Automatic screen scrolling
+#Automatic screen scrolling
         if self.player.rect.right < 2*WIDTH/3:
             self.player.pos.x -= 2
             for plat in self.platforms:
@@ -140,14 +151,16 @@ class Game:
         
         # If we die
         if self.player.rect.bottom > HEIGHT or self.player.rect.right < 0:
-            f = open("highscore.txt")
-            self.score_var = 0
-            if self.score_total > int(f.readline()):
-                f = open("highscore.txt", "w")
-                self.score_var = self.score_total
-                f.write(str(self.score_total))
-                f.close()
+            f = open("options.txt")
+            txt = f.readline()
             f.close() 
+            self.score_var = 0
+            if txt == '0' or self.score_total > log(int(txt), 801):
+                f = open("options.txt", "w")
+                self.score_var = self.score_total
+                f.write(str(801 ** self.score_total))
+                f.close()
+
             
             self.playing = False
         
@@ -186,9 +199,8 @@ class Game:
         self.backgrounds.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score_total), 40, WHITE, WIDTH/2, 15)
-        f = open("highscore.txt")
-        self.draw_text("Highscore: " + str(int(f.readline())), 25, WHITE, 70, 15)
-        f.close()
+        self.draw_text("Highscore: " + str(self.hscore), 25, WHITE, 70, 15)
+
         # *after* drawing everything, flip the display
         pg.display.flip()
 
