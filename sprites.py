@@ -9,14 +9,21 @@ class Player(pg.sprite.Sprite):
     def __init__(self, game):
         self.game = game
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load(os.path.join(img_folder, "slime.png")).convert()
-        self.image.set_colorkey((255,0,255))
+        self.image1 = pg.image.load(os.path.join(img_folder, "slime.png")).convert()
+        self.image1.set_colorkey((255,0,255))
+        self.image = self.image1
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.pos = vec(WIDTH / 2, HEIGHT / 2)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
-        
+        self.image2 = pg.image.load(os.path.join(img_folder, "slime2.png")).convert()
+        self.image2.set_colorkey((255,0,255))
+    
+    def look_right(self):
+        self.image = self.image1
+    def look_left(self):
+        self.image = self.image2
     def jump(self):
         # jump only if standing on a platform
         self.rect.x += 1

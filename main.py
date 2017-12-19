@@ -15,6 +15,7 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
+        self.looking_right = True
         self.font_name = pg.font.match_font(FONT_NAME)
 
         # spawn new platforms
@@ -80,31 +81,34 @@ class Game:
     def update(self):
         # Game Loop - Update
         self.all_sprites.update()
-        # check if player hits a platform - only if falling
+        
+        #Turn sprite based on velocity
+        if self.looking_right and self.player.vel.x < 0:
+            self.player.look_left()
+            self.looking_right = False
+        elif self.looking_right == False and self.player.vel.x > 0:
+            self.player.look_right()
+            self.looking_right = True
+
         if self.player.vel.y != 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-            if hits: #Parandan selle millalgi hiljem -Kaarel
-##                if self.player.pos.x < hits[0].rect.left - 20:
-##                    self.player.pos.x = hits[0].rect.left - 20
-##                    self.vel.x = 0
-##                if self.player.pos.x > hits[0].rect.right + 20:
-##                    self.player.pos.x = hits[0].rect.left + 20
-##                    self.vel.x = 0
-##                if self.player.pos.y <
-                #If on similar height
+            if hits:
+                #If on on similar height
                 if hits[0].rect.top + 10 < self.player.rect.center[1] < hits[0].rect.bottom -10:
+                    #If to the left of platform
                     if hits[0].rect.right > self.player.rect.center[0]:
                         self.player.pos.x -= 5
                     else:
                         self.player.pos.x += 5
                     self.player.vel.x = -self.player.vel.x
+                #If platform is below player
                 elif hits[0].rect.top  > self.player.rect.top -10:
                     self.player.pos.y = hits[0].rect.top + 1
                     self.player.vel.y = 0
                 else:
                     self.player.pos.y = hits[0].rect.bottom +26
                     self.player.vel.y = 0
-##                self.player.pos.x = hits[0].rect.left + 1
+
     
 
                 
@@ -128,8 +132,7 @@ class Game:
             bg.rect.right -= 2 #Auto move
             if bg.rect.right <= 0:
                 bg.kill()
-                self.spawn_background()
-        
+                self.spawn_background()       
         
         # Highscore
         time_now = (time.time() - self.time)
