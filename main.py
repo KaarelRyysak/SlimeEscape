@@ -199,7 +199,7 @@ class Game:
         self.backgrounds.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score_total), 40, WHITE, WIDTH/2, 15)
-        self.draw_text("Highscore: " + str(self.hscore), 25, WHITE, 70, 15)
+        self.draw_text("Highscore: " + str(self.hscore), 20, WHITE, 80, 15)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
