@@ -278,9 +278,7 @@ class Game:
                         pg.mixer.music.unpause()
                         self.mängib = True
                         self.hüppab = True
-                        
-            if keys[K_c]:
-                self.draw_text("Credits: Kaspar Raid, Kaarel Rüüsak", 20, WHITE, WIDTH/2, 20)
+
             
             pg.display.update()
             self.clock.tick(15)
