@@ -66,12 +66,12 @@ class Game:
         f.close()
         if int(txt) == 0:
             self.hscore = 0
-        elif int(txt) % 801 != 0:
+        elif int(txt) % 81 != 0:
             print("Ära jama mängu failidega!")
             self.playing = False
             self.running = False
         else:
-            self.hscore = int(log(int(txt), 801))
+            self.hscore = int(log(int(txt), 81))
         
         for bg in BG_LIST:
             backg = Background(self, bg[0], bg[1])
@@ -154,10 +154,10 @@ class Game:
             txt = f.readline()
             f.close() 
             self.score_var = 0
-            if txt == '0' or self.score_total > log(int(txt), 801):
+            if txt == '0' or self.score_total > log(int(txt), 81):
                 f = open("options.txt", "w")
                 self.score_var = self.score_total
-                f.write(str(801 ** self.score_total))
+                f.write(str(81 ** self.score_total))
                 f.close()
 
             
@@ -227,7 +227,7 @@ class Game:
         self.backgrounds.draw(self.screen)
         self.all_sprites.draw(self.screen)
         self.draw_text(str(self.score_total), 40, WHITE, WIDTH/2, 15)
-        self.draw_text("Highscore: " + str(self.hscore), 20, WHITE, 80, 15)
+        self.draw_text("Highscore: " + str(self.hscore + 1), 20, WHITE, 80, 15)
 
         # *after* drawing everything, flip the display
         pg.display.flip()
