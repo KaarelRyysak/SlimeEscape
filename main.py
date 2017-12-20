@@ -9,8 +9,8 @@ import time
 class Game:
     def __init__(self):
         # initialize game window, etc
+        pg.mixer.pre_init(44100, 16, 2, 5000)
         pg.init()
-        pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
@@ -18,6 +18,9 @@ class Game:
         self.running = True
         self.looking_right = True
         self.font_name = pg.font.match_font(FONT_NAME)
+        pg.mixer.music.load(os.path.join("taustamuusika.mp3"))
+        pg.mixer.music.play(loops=-1)
+        pg.mixer.music.set_volume(0.5)
 
         # spawn new platforms
     def spawn_platforms(self):
@@ -45,7 +48,8 @@ class Game:
             self.backgrounds.add(bg)
 
     def new(self):
-        # start a new game            
+        # start a new game
+        self.music = True
         self.score = 0
         self.time = time.time()
         self.score_total = 0
@@ -82,13 +86,11 @@ class Game:
             self.platforms.add(p)
         self.spawn_platforms()
         self.spawn_background()
-        pg.mixer.music.load(os.path.join("taustamuusika.mp3"))
         self.run()
         
 
     def run(self):
         # Game Loop
-        pg.mixer.music.play(loops=-1)
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
@@ -208,7 +210,7 @@ class Game:
             # Checks if it's a shortjump event
             if event.type == pg.USEREVENT+1:
                 self.player.shortjump()
-                
+
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_m:
                     if self.mängib:
@@ -217,6 +219,7 @@ class Game:
                     else:
                         pg.mixer.music.unpause()
                         self.mängib = True
+
 
     def draw(self):
         # Game Loop
@@ -240,7 +243,15 @@ class Game:
                 if event.type == pg.QUIT:
                     pg.quit()
                     quit()
-
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_m:
+                        if self.mängib:
+                            pg.mixer.music.pause()
+                            self.mängib = False
+                        else:
+                            pg.mixer.music.unpause()
+                            self.mängib = True
+        
             mouse = pg.mouse.get_pos()
             click = pg.mouse.get_pressed()
             
@@ -250,7 +261,6 @@ class Game:
                     intro = False
             else:
                 self.screen.blit(notactive, (0, 0))
-            
             
             pg.display.update()
             self.clock.tick(15)
