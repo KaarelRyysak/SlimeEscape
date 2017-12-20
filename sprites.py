@@ -10,6 +10,7 @@ class Player(pg.sprite.Sprite):
         self.game = game
         pg.sprite.Sprite.__init__(self)
         self.jump_sound = pg.mixer.Sound(os.path.join("hüppamine.wav"))
+        self.jump_sound.set_volume(0.5)
         self.image1 = pg.image.load(os.path.join(img_folder, "slime.png")).convert()
         self.image1.set_colorkey((255,0,255))
         self.image = self.image1

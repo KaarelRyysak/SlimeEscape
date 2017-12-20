@@ -222,9 +222,11 @@ class Game:
                 if event.key == pg.K_m:
                     if self.mängib:
                         pg.mixer.music.pause()
+                        self.player.jump_sound.set_volume(0)
                         self.mängib = False
                     else:
                         pg.mixer.music.unpause()
+                        self.player.jump_sound.set_volume(0.5)
                         self.mängib = True
 
 
