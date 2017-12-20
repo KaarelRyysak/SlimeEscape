@@ -51,6 +51,11 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.backgrounds = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        
+        self.platform_move = 0
+        self.player_move = 0
+        self.bg_move = 0
+        
         f = open("options.txt")
         txt = f.readline()
         f.close()
@@ -108,9 +113,9 @@ class Game:
                 if hits[0].rect.top + 10 < self.player.rect.center[1] < hits[0].rect.bottom -10:
                     #If to the left of platform
                     if hits[0].rect.right > self.player.rect.center[0]:
-                        self.player.pos.x -= 5
+                        self.player_move -= 5
                     else:
-                        self.player.pos.x += 5
+                        self.player_move += 5
                     self.player.vel.x = -self.player.vel.x
                 #If platform is below player
                 elif hits[0].rect.top  > self.player.rect.top -10:
@@ -125,32 +130,22 @@ class Game:
                 
         # if player reaches right 1/4 of screen
         if self.player.rect.right >= 2*WIDTH / 3:
-            self.player.pos.x -= max(abs(self.player.vel.x),2)
-            for plat in self.platforms:
-                plat.rect.right -= max(abs(self.player.vel.x),2)
-                if plat.rect.right <= 0:
-                        if plat.reset:
-                            self.spawn_platforms()
-                            self.score += 300
-                        plat.kill()
+            self.player_move -= max(abs(self.player.vel.x),2)
+            self.platform_move -= max(abs(self.player.vel.x),2)
+
 
 #Automatic screen scrolling
         if self.player.rect.right < 2*WIDTH/3:
-            self.player.pos.x -= 2
-            for plat in self.platforms:
-                plat.rect.right -= 2
-        for bg in self.backgrounds:
-            bg.rect.right -= 2 #Auto move
-            if bg.rect.right <= 0:
-                bg.kill()
-                self.spawn_background()       
+            self.player_move -= 2
+            self.platform_move -= 2
+     
         
         # Highscore
         time_now = (time.time() - self.time)
         self.score_total = self.score + round(time_now * 15)
         
         # If we die
-        if self.player.rect.bottom > HEIGHT or self.player.rect.right < 0:
+        if self.player.rect.bottom > HEIGHT:
             f = open("options.txt")
             txt = f.readline()
             f.close() 
@@ -166,14 +161,30 @@ class Game:
         
         # Moving background
         if self.player.rect.right >= 2*WIDTH/3:
-            for bg in self.backgrounds:
-                bg.rect.right -= max(abs((self.player.vel.x)/(2)), 2)
-                if bg.rect.right <= 0:
-                        bg.kill()
-                        self.spawn_background()
+            self.bg_move -= max(abs((self.player.vel.x)/(2)), 2)
+        self.bg_move -= 2
         
+        #Move platforms
+        for plat in self.platforms:
+            plat.rect.right += self.platform_move
+            if plat.rect.right <= 0:
+                if plat.reset:
+                    self.spawn_platforms()
+                    self.score += 300
+                plat.kill()
+                
+        #Move backgrounds
+        for bg in self.backgrounds:
+            bg.rect.right += self.bg_move
+            if bg.rect.right <= 0:
+                bg.kill()
+                self.spawn_background()
+        #Move player
+        self.player.pos.x += self.player_move
 
-
+        self.platform_move = 0
+        self.player_move = 0
+        self.bg_move = 0
                 
 
 
