@@ -9,6 +9,7 @@ class Player(pg.sprite.Sprite):
     def __init__(self, game):
         self.game = game
         pg.sprite.Sprite.__init__(self)
+        self.jump_sound = pg.mixer.Sound(os.path.join("hüppamine.wav"))
         self.image1 = pg.image.load(os.path.join(img_folder, "slime.png")).convert()
         self.image1.set_colorkey((255,0,255))
         self.image = self.image1
@@ -31,6 +32,7 @@ class Player(pg.sprite.Sprite):
         self.rect.x -= 1
         if hits:
             self.vel.y = -PLAYER_JUMP
+            self.jump_sound.play()
             # Sets an event that will see if it's a short jump
             pg.time.set_timer(USEREVENT+1, 100)
     
