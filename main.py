@@ -194,6 +194,11 @@ class Game:
         self.platform_move = 0
         self.player_move = 0
         self.bg_move = 0
+        
+        #Limit max fall velocity
+        #(to avoid falling through platforms)
+        if self.player.vel.y > 18:
+            self.player.vel.y = 18
                 
 
 
