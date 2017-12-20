@@ -14,6 +14,7 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
+        self.hüppab = True
         self.mängib = True
         self.running = True
         self.looking_right = True
@@ -49,7 +50,6 @@ class Game:
 
     def new(self):
         # start a new game
-        self.music = True
         self.score = 0
         self.time = time.time()
         self.score_total = 0
@@ -86,6 +86,10 @@ class Game:
             self.platforms.add(p)
         self.spawn_platforms()
         self.spawn_background()
+        if self.hüppab == True:
+            self.player.jump_sound.set_volume(0.5)
+        else:
+            self.player.jump_sound.set_volume(0)
         self.run()
         
 
@@ -224,10 +228,12 @@ class Game:
                         pg.mixer.music.pause()
                         self.player.jump_sound.set_volume(0)
                         self.mängib = False
+                        self.hüppab = False
                     else:
                         pg.mixer.music.unpause()
                         self.player.jump_sound.set_volume(0.5)
                         self.mängib = True
+                        self.hüppab = True
 
 
     def draw(self):
@@ -248,19 +254,6 @@ class Game:
         active = pg.image.load(os.path.join(img_folder, "active.jpg")).convert()
         notactive = pg.image.load(os.path.join(img_folder, "notactive.jpg")).convert()
         while intro:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    quit()
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_m:
-                        if self.mängib:
-                            pg.mixer.music.pause()
-                            self.mängib = False
-                        else:
-                            pg.mixer.music.unpause()
-                            self.mängib = True
-        
             mouse = pg.mouse.get_pos()
             click = pg.mouse.get_pressed()
             
@@ -270,6 +263,24 @@ class Game:
                     intro = False
             else:
                 self.screen.blit(notactive, (0, 0))
+            
+            for event in pg.event.get():
+                keys = pg.key.get_pressed()
+                if keys[pg.QUIT]:
+                    pg.quit()
+                    quit()
+                if keys[pg.K_m]:
+                    if self.mängib:
+                        pg.mixer.music.pause()
+                        self.mängib = False
+                        self.hüppab = False
+                    else:
+                        pg.mixer.music.unpause()
+                        self.mängib = True
+                        self.hüppab = True
+                        
+            if keys[K_c]:
+                self.draw_text("Credits: Kaspar Raid, Kaarel Rüüsak", 20, WHITE, WIDTH/2, 20)
             
             pg.display.update()
             self.clock.tick(15)
