@@ -14,6 +14,7 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
+        self.mängib = True
         self.running = True
         self.looking_right = True
         self.font_name = pg.font.match_font(FONT_NAME)
@@ -81,12 +82,13 @@ class Game:
             self.platforms.add(p)
         self.spawn_platforms()
         self.spawn_background()
-            
+        pg.mixer.music.load(os.path.join("taustamuusika.mp3"))
         self.run()
         
 
     def run(self):
         # Game Loop
+        pg.mixer.music.play(loops=-1)
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
@@ -206,6 +208,15 @@ class Game:
             # Checks if it's a shortjump event
             if event.type == pg.USEREVENT+1:
                 self.player.shortjump()
+                
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_m:
+                    if self.mängib:
+                        pg.mixer.music.pause()
+                        self.mängib = False
+                    else:
+                        pg.mixer.music.unpause()
+                        self.mängib = True
 
     def draw(self):
         # Game Loop
