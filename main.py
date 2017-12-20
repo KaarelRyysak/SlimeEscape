@@ -167,11 +167,14 @@ class Game:
         #Move platforms
         for plat in self.platforms:
             plat.rect.right += self.platform_move
-            if plat.rect.right <= 0:
-                if plat.reset:
-                    self.spawn_platforms()
-                    self.score += 300
-                plat.kill()
+            if plat.rect.right <= 50:
+                plat.rect.top += plat.fall
+                plat.fall = plat.fall + 1 * 1.1
+                if plat.rect.top > 400:
+                    if plat.reset:
+                        self.spawn_platforms()
+                        self.score += 300
+                    plat.kill()
                 
         #Move backgrounds
         for bg in self.backgrounds:
