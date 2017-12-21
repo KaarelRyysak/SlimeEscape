@@ -56,6 +56,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.backgrounds = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        self.score_var = 0
         
         self.platform_move = 0
         self.player_move = 0
@@ -65,7 +66,7 @@ class Game:
         txt = f.readline()
         f.close()
         if int(txt) == 0:
-            self.hscore = 0
+            self.hscore = 0 - 1
         elif int(txt) % 81 != 0:
             print("Ära jama mängu failidega!")
             self.playing = False
@@ -80,7 +81,8 @@ class Game:
         self.player = Player(self)
         self.all_sprites.add(self.player)
         
-        for plat in PLATFORM_LIST:
+        #Spawn starting platforms
+        for plat in PLATFORM_LIST: 
             p = Platform(plat[0], plat[1], plat[2], plat[3])
             self.all_sprites.add(p)
             self.platforms.add(p)
@@ -113,25 +115,25 @@ class Game:
         elif self.looking_right == False and self.player.vel.x > 0:
             self.player.look_right()
             self.looking_right = True
-
-        if self.player.vel.y != 0:
-            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-            if hits:
-                #If on on similar height
-                if hits[0].rect.top + 10 < self.player.rect.center[1] < hits[0].rect.bottom -10:
-                    #If to the left of platform
-                    if hits[0].rect.right > self.player.rect.center[0]:
-                        self.player_move -= 5
-                    else:
-                        self.player_move += 5
-                    self.player.vel.x = -self.player.vel.x
-                #If platform is below player
-                elif hits[0].rect.top  > self.player.rect.top -10:
-                    self.player.pos.y = hits[0].rect.top + 1
-                    self.player.vel.y = 0
-                else:
-                    self.player.pos.y = hits[0].rect.bottom +26
-                    self.player.vel.y = 0
+    
+        #Collision
+        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+        if hits:
+            #If on on similar height
+            if hits[0].rect.top + 10 < self.player.rect.center[1] < hits[0].rect.bottom -10:
+                #If to the left of platform
+                if hits[0].rect.right > self.player.rect.center[0]:
+                    self.player_move -= 5
+                else: #To the right of platform
+                    self.player_move += 5
+                self.player.vel.x = -self.player.vel.x
+            #If platform is below player
+            elif hits[0].rect.top  > self.player.rect.top -10:
+                self.player.pos.y = hits[0].rect.top + 1
+                self.player.vel.y = 0
+            else: #Platform above player
+                self.player.pos.y = hits[0].rect.bottom +26
+                self.player.vel.y = 0
 
     
 
@@ -142,13 +144,13 @@ class Game:
             self.platform_move -= max(abs(self.player.vel.x),2)
 
 
-#Automatic screen scrolling
+        #Automatic screen scrolling
         if self.player.rect.right < 2*WIDTH/3:
             self.player_move -= 2
             self.platform_move -= 2
      
         
-        # Highscore
+        # Score
         time_now = (time.time() - self.time)
         self.score_total = self.score + round(time_now * 15)
         
