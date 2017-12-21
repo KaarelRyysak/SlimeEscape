@@ -138,7 +138,7 @@ class Game:
     
 
                 
-        # if player reaches right 1/4 of screen
+        # if player reaches right side of the screen
         if self.player.rect.right >= 2*WIDTH / 3:
             self.player_move -= max(abs(self.player.vel.x),2)
             self.platform_move -= max(abs(self.player.vel.x),2)
